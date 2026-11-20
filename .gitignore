@@ -1,0 +1,30 @@
+# Personal DJ data and local media
+*.xml
+*.m4a
+*.mp3
+*.wav
+*.aif
+*.aiff
+*.flac
+*.ogg
+*.aac
+*.log
+*.psd
+*.sqlite
+*.db
+
+# Local builds and caches
+.firebase/
+test-results/
+node_modules/
+app/node_modules/
+app/dist/
+app/release/
+/electron/
+/release/
+*.app/
+
+# Local environment
+.DS_Store
+.env
+.env.*

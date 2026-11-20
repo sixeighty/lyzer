@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: oklch(0.12 0.008 260);
+  --foreground: oklch(0.97 0.004 240);
+  --card: oklch(0.17 0.009 260);
+  --card-foreground: oklch(0.97 0.004 240);
+  --popover: oklch(0.18 0.009 260);
+  --popover-foreground: oklch(0.97 0.004 240);
+  --primary: oklch(0.91 0.15 155);
+  --primary-foreground: oklch(0.15 0.025 155);
+  --secondary: oklch(0.22 0.012 260);
+  --secondary-foreground: oklch(0.96 0.004 240);
+  --muted: oklch(0.22 0.01 260);
+  --muted-foreground: oklch(0.68 0.012 250);
+  --accent: oklch(0.26 0.02 240);
+  --accent-foreground: oklch(0.98 0.003 240);
+  --destructive: oklch(0.65 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.29 0.012 260);
+  --input: oklch(0.28 0.012 260);
+  --ring: oklch(0.85 0.15 155);
+  --radius: 0.75rem;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  color: var(--foreground);
+  background: var(--background);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; min-width: 320px; min-height: 100%; }
+body { min-height: 100vh; overflow-x: hidden; }
+button, input, select { font: inherit; }
+button { color: inherit; }
+button, select, label { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
+::selection { background: rgba(118, 255, 193, .25); }

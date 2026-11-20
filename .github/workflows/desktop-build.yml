@@ -1,0 +1,54 @@
+name: Desktop builds
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS
+            os: macos-latest
+            args: --mac --x64 --arm64
+          - name: Windows
+            os: windows-latest
+            args: --win --x64 --arm64
+          - name: Linux
+            os: ubuntu-latest
+            args: --linux --x64 --arm64
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install dependencies
+        working-directory: app
+        run: npm ci
+
+      - name: Build application
+        working-directory: app
+        run: npm run build
+
+      - name: Create desktop package
+        working-directory: app
+        run: npx electron-builder ${{ matrix.args }} --publish never
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: lyzer-desktop-${{ matrix.name }}
+          path: app/release/**/*
+          if-no-files-found: error
