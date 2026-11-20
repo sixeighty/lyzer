@@ -3,6 +3,7 @@ name: Desktop builds
 on:
   push:
     branches: [main]
+    tags: ['v*']
   workflow_dispatch:
 
 jobs:
@@ -13,15 +14,24 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: macOS
+          - name: macOS-x64
             os: macos-latest
-            args: --mac --x64 --arm64
-          - name: Windows
+            args: --mac --x64
+          - name: macOS-arm64
+            os: macos-latest
+            args: --mac --arm64
+          - name: Windows-x64
             os: windows-latest
-            args: --win --x64 --arm64
-          - name: Linux
+            args: --win --x64
+          - name: Windows-arm64
+            os: windows-latest
+            args: --win --arm64
+          - name: Linux-x64
             os: ubuntu-latest
-            args: --linux --x64 --arm64
+            args: --linux --x64
+          - name: Linux-arm64
+            os: ubuntu-latest
+            args: --linux --arm64
 
     steps:
       - name: Check out source
@@ -49,6 +59,30 @@ jobs:
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
-          name: lyzer-desktop-${{ matrix.name }}
-          path: app/release/**/*
+          name: lyzer-${{ matrix.name }}
+          path: |
+            app/release/*.dmg
+            app/release/*.zip
+            app/release/*.exe
+            app/release/*.AppImage
+            app/release/*.deb
           if-no-files-found: error
+
+  release:
+    name: Publish GitHub release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all installers
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${GITHUB_REF_NAME}" --title "LYZER ${GITHUB_REF_NAME}" --generate-notes artifacts/**/*
